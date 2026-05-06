@@ -1,13 +1,4 @@
-bash
-
-cat > /home/claude/gen_v3.py << 'PYEOF'
-import base64
-
-with open('/tmp/wm_b64.txt') as f:    WM   = f.read().strip()
-with open('/tmp/full_b64.txt') as f:  FULL = f.read().strip()
-
-# ── HTML template – use @@WM@@ and @@FULL@@ as placeholders ──────────────────
-T = r"""<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
