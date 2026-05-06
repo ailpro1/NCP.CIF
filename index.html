@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>QA Report Generator</title>
+
+<!-- PDF LIB -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+body {
+    font-family: Verdana;
+    background: #f5f5f5;
+    padding: 10px;
+}
+
+/* FORM STYLE */
+.container {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+/* TITLE */
+.title {
+    text-align: center;
+    font-family: "Copperplate Gothic Bold";
+    font-size: 24px;
+    color: #948671;
+}
+
+/* SECTION */
+.section-title {
+    color: red;
+    font-size: 12px;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+/* INPUT */
+input, select, textarea {
+    width: 100%;
+    padding: 6px;
+    margin-top: 5px;
+    font-size: 10px;
+}
+
+/* BUTTON */
+button {
+    margin-top: 10px;
+    padding: 10px;
+    background: #948671;
+    color: white;
+    border: none;
+    width: 100%;
+}
+
+/* HIDDEN */
+.hidden {
+    display: none;
+}
+
+/* PDF AREA */
+#pdfContent {
+    width: 210mm;
+    min-height: 297mm;
+    background-image: url('watermark.png');
+    background-size: cover;
+    padding: 20mm;
+    box-sizing: border-box;
+}
+
+/* PAGE BREAK CONTROL */
+.section-block {
+    page-break-inside: avoid;
+    margin-bottom: 10px;
+}
+
+/* IMAGE PREVIEW */
+img.preview {
+    width: 100px;
+    margin-top: 5px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2 class="title">Quality Assessment Report</h2>
+
+<!-- SECTION 1 -->
+<div class="section-title">Section 1 – Basic Information</div>
+
+<label>Report Type</label>
+<select id="reportType" onchange="setPrefix()">
+    <option value="">Select</option>
+    <option value="NCP">Non-Conformance Product</option>
+    <option value="CIF">Continuous Improvement Findings</option>
+</select>
+
+<label>Report No</label>
+<input type="text" id="reportNo" placeholder="Auto prefix + number">
+
+<label>Date Issued</label>
+<input type="date" id="dateIssued">
+
+<label>Issued By</label>
+<select id="issuedBy" onchange="toggleOther('issuedBy')">
+    <option>Ahmad Fudhail</option>
+    <option>Wan M. Afif</option>
+    <option value="other">Other</option>
+</select>
+
+<input type="text" id="issuedByOther" class="hidden" placeholder="Enter name">
+
+<label>Part / Heat Number</label>
+<input type="text" id="partNo">
+
+<label>Crate Number</label>
+<input type="text" id="crateNo">
+
+
+<!-- SECTION 2 -->
+<div class="section-title">Section 2 – Description</div>
+
+<label>Type</label>
+<select id="findingType">
+    <option>Finding</option>
+    <option>Non-Conformance</option>
+</select>
+
+<label>Location</label>
+<select id="location" onchange="toggleOther('location')">
+    <option>Tiger 1</option>
+    <option>Tiger 2</option>
+    <option value="other">Other</option>
+</select>
+
+<input type="text" id="locationOther" class="hidden" placeholder="Enter location">
+
+<label>Description</label>
+<textarea id="desc"></textarea>
+
+<label>Upload Photos (Max 3)</label>
+<input type="file" id="photos" multiple accept="image/*" onchange="previewImages()">
+
+<div id="preview"></div>
+
+
+<!-- SECTION 3 -->
+<div class="section-title">Section 3 – QC Lead Review</div>
+
+<select onchange="toggleSection('sec3', this)">
+    <option value="yes">Required</option>
+    <option value="no">Not Required</option>
+</select>
+
+<div id="sec3">
+<label>Initial Action</label>
+<select id="action">
+    <option>Hold</option>
+    <option>Replace</option>
+    <option>Rework</option>
+    <option>Use as Is</option>
+</select>
+
+<label>Remarks</label>
+<textarea id="remarks"></textarea>
+
+<label>Date</label>
+<input type="date" id="qcDate">
+</div>
+
+
+<!-- SECTION 4 -->
+<div class="section-title">Section 4 – MRB Review</div>
+
+<select onchange="toggleSection('sec4', this)">
+    <option value="yes">Required</option>
+    <option value="no">Not Required</option>
+</select>
+
+<div id="sec4">
+
+<label>Members Present (Max 5)</label>
+<input type="text" id="mrb">
+
+<label>Decision</label>
+<select id="decision">
+    <option>Rework</option>
+    <option>Scrap</option>
+    <option>Use as Is</option>
+</select>
+
+<label>Comments</label>
+<textarea id="comments"></textarea>
+
+</div>
+
+
+<button onclick="generatePDF()">Generate PDF</button>
+
+</div>
+
+<!-- PDF TEMPLATE -->
+<div id="pdfContent" class="hidden"></div>
+
+<script>
+
+/* PREFIX LOGIC */
+function setPrefix() {
+    let type = document.getElementById("reportType").value;
+    document.getElementById("reportNo").value = type + "-";
+}
+
+/* OTHER FIELD */
+function toggleOther(field) {
+    let select = document.getElementById(field);
+    let other = document.getElementById(field + "Other");
+
+    if (select.value === "other") {
+        other.classList.remove("hidden");
+    } else {
+        other.classList.add("hidden");
+    }
+}
+
+/* COLLAPSE SECTION */
+function toggleSection(id, el) {
+    document.getElementById(id).style.display =
+        el.value === "yes" ? "block" : "none";
+}
+
+/* IMAGE PREVIEW */
+function previewImages() {
+    let preview = document.getElementById("preview");
+    preview.innerHTML = "";
+
+    let files = document.getElementById("photos").files;
+
+    for (let i = 0; i < files.length && i < 3; i++) {
+        let img = document.createElement("img");
+        img.src = URL.createObjectURL(files[i]);
+        img.className = "preview";
+        preview.appendChild(img);
+    }
+}
+
+/* GENERATE PDF */
+function generatePDF() {
+
+    let pdf = document.getElementById("pdfContent");
+
+    pdf.innerHTML = `
+    <div class="title">Quality Assessment Report</div>
+
+    <div class="section-block">
+    <b>Report No:</b> ${reportNo.value}<br>
+    <b>Date:</b> ${dateIssued.value}<br>
+    <b>Issued By:</b> ${issuedBy.value === 'other' ? issuedByOther.value : issuedBy.value}
+    </div>
+
+    <div class="section-block">
+    <b>Description:</b><br>${desc.value}
+    </div>
+    `;
+
+    /* ADD IMAGES */
+    let files = document.getElementById("photos").files;
+    if (files.length > 0) {
+        let imgHTML = "<div class='section-block'><b>Photos:</b><br>";
+        for (let i = 0; i < files.length && i < 3; i++) {
+            imgHTML += `<img src="${URL.createObjectURL(files[i])}" width="150">`;
+        }
+        imgHTML += "</div>";
+        pdf.innerHTML += imgHTML;
+    }
+
+    html2pdf().from(pdf).set({
+        margin: 0,
+        filename: reportNo.value + ".pdf",
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    }).save();
+}
+
+</script>
+
+</body>
+</html>
