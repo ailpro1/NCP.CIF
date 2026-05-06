@@ -738,14 +738,4 @@ function buildPV(){
 }
 </script>
 </body>
-</html>"""
-
-# Substitute placeholders
-html = T.replace('@@WM@@', WM).replace('@@FULL@@', FULL)
-
-out = '/tmp/QA_Report_App_v3.html'
-with open(out,'w') as f:
-    f.write(html)
-print(f"Done. Size: {len(html):,} chars ({len(html)//1024} KB)")
-PYEOF
-python3 /home/claude/gen_v3.py
+</html>
