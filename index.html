@@ -1,0 +1,741 @@
+"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="QA Report">
+<title>QA Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/4.1.7/signature_pad.umd.min.js"></script>
+<style>
+/* ── APP THEME ────────────────────────────── */
+:root{
+  --bg:#f0f2f5;--card:#fff;--border:#d1d5db;--b2:#e5e7eb;
+  --red:#b91c1c;--rl:#fef2f2;--rt:rgba(185,28,28,.1);
+  --tx:#111827;--dim:#6b7280;--mu:#9ca3af;
+  --r:10px;--f:'Inter',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;}
+body{font-family:var(--f);background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;}
+#app{max-width:600px;margin:0 auto;padding-bottom:110px;}
+
+/* APP HEADER */
+.app-hdr{background:#fff;border-bottom:3px solid var(--red);padding:10px 14px;position:sticky;top:0;z-index:30;box-shadow:0 2px 8px rgba(0,0,0,.08);display:flex;align-items:center;gap:12px;}
+.app-hdr img{height:40px;width:auto;}
+.hdr-t .ver{font-size:9px;letter-spacing:1.2px;color:var(--mu);text-transform:uppercase;}
+.hdr-t h1{font-size:15px;font-weight:700;color:var(--tx);}
+
+/* SECTION */
+.sec{margin:14px 12px 0;background:var(--card);border-radius:var(--r);border:1px solid var(--border);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;background:#fafafa;border-bottom:1px solid var(--b2);}
+.sec-hdr-l .lbl{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--mu);margin-bottom:2px;}
+.sec-hdr-l .nm{font-size:14px;font-weight:700;color:var(--tx);}
+.bdg{font-size:10px;font-weight:700;text-transform:uppercase;padding:4px 10px;border-radius:20px;}
+.bdg-r{color:var(--red);background:var(--rl);}.bdg-o{color:var(--mu);background:var(--b2);}
+.sec-body{padding:16px;}
+
+/* FIELDS */
+.fld{margin-bottom:14px;}.fld:last-child{margin-bottom:0;}
+.fld>label{display:block;font-size:11px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;color:var(--dim);margin-bottom:6px;}
+input[type=text],input[type=date],textarea,select{
+  width:100%;background:#fff;border:1.5px solid var(--border);border-radius:7px;
+  padding:10px 13px;color:var(--tx);font-family:var(--f);font-size:15px;
+  outline:none;-webkit-appearance:none;transition:border-color .15s;
+}
+input:focus,textarea:focus,select:focus{border-color:var(--red);box-shadow:0 0 0 3px var(--rt);}
+textarea{resize:vertical;min-height:80px;line-height:1.55;}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236b7280'%3E%3Cpath d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:18px;padding-right:38px;}
+
+.pfx-w{display:flex;}
+.pfx{background:#f9fafb;border:1.5px solid var(--border);border-right:none;border-radius:7px 0 0 7px;padding:10px 12px;font-size:14px;font-weight:700;color:var(--red);white-space:nowrap;}
+.pfx-w input{border-radius:0 7px 7px 0;flex:1;}
+
+.rno-w{display:flex;gap:8px;}
+.rno-p{background:var(--rl);border:1.5px solid var(--red);border-radius:7px;padding:10px 14px;font-size:16px;font-weight:700;color:var(--red);min-width:88px;text-align:center;}
+.rno-w input{flex:1;font-size:16px;font-weight:700;letter-spacing:2px;}
+
+/* OPTION ITEMS */
+.og{display:flex;flex-direction:column;gap:7px;}
+.oi{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:8px;border:1.5px solid var(--border);cursor:pointer;user-select:none;background:#fff;transition:all .15s;}
+.oi.sel{border-color:var(--red);background:var(--rl);}
+.om{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#fff;transition:all .15s;}
+.oi.sel .om{border-color:var(--red);background:var(--red);}
+.oi.sel .om::after{content:'';width:7px;height:7px;background:#fff;border-radius:50%;display:block;}
+.om.sq{border-radius:4px;}
+.oi.sel .om.sq::after{content:'✓';font-size:12px;font-weight:800;color:#fff;width:auto;height:auto;background:transparent;}
+.ot{font-size:14px;font-weight:500;flex:1;}
+
+/* TOGGLE */
+.tg-r{display:flex;gap:6px;margin-bottom:16px;padding:4px;background:var(--b2);border-radius:9px;}
+.tg-b{flex:1;padding:9px;border-radius:7px;border:none;background:transparent;color:var(--dim);font-family:var(--f);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;}
+.tg-b.on{background:#fff;color:var(--tx);box-shadow:0 1px 4px rgba(0,0,0,.1);}
+.tg-b.on.req{color:var(--red);}
+
+/* PHOTOS */
+.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.ps{aspect-ratio:1;border-radius:8px;border:2px dashed var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;background:#f9fafb;}
+.ps:active{opacity:.75;}
+.ps .pi{font-size:22px;margin-bottom:4px;}.ps .pl{font-size:10px;font-weight:600;text-transform:uppercase;color:var(--mu);}
+.ps img{width:100%;height:100%;object-fit:cover;}
+.pe{position:absolute;bottom:5px;right:5px;background:rgba(0,0,0,.6);color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;padding:2px 7px;border-radius:4px;}
+.pd{position:absolute;top:5px;right:5px;background:rgba(185,28,28,.85);color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;}
+
+/* MEMBERS */
+.mr{display:flex;align-items:center;gap:8px;margin-bottom:8px;}.mr:last-child{margin-bottom:0;}
+.mn{width:26px;height:26px;border-radius:50%;background:var(--red);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+/* SIGNATURE */
+.sw{position:relative;border:1.5px solid var(--border);border-radius:8px;background:#fff;height:120px;}
+.sw canvas{width:100%!important;height:100%!important;border-radius:8px;touch-action:none;display:block;}
+.sh2{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:11px;color:var(--mu);pointer-events:none;white-space:nowrap;font-style:italic;}
+.sc{position:absolute;top:6px;right:8px;font-size:11px;font-weight:600;color:#dc2626;cursor:pointer;padding:2px 8px;border-radius:4px;background:rgba(255,255,255,.9);}
+
+.two-c{display:grid;grid-template-columns:1fr 1fr;gap:12px;}.two-c .fld{margin-bottom:0;}
+.note{padding:10px 14px;background:#fff7ed;border-left:3px solid #f59e0b;border-radius:0 7px 7px 0;margin-top:14px;font-size:12px;color:#92400e;line-height:1.5;}
+
+/* BOTTOM BAR */
+.bot{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);padding:10px 12px 18px;z-index:30;box-shadow:0 -2px 10px rgba(0,0,0,.07);}
+.bot-btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.gbn{padding:13px 6px;border:none;border-radius:var(--r);font-family:var(--f);font-size:13px;font-weight:700;cursor:pointer;transition:opacity .15s;}
+.gbn:active{opacity:.8;}
+.gbn-pdf{background:var(--red);color:#fff;box-shadow:0 2px 6px rgba(185,28,28,.3);}
+.gbn-doc{background:#1d4ed8;color:#fff;box-shadow:0 2px 6px rgba(29,78,216,.3);}
+.gbn-both{background:#059669;color:#fff;box-shadow:0 2px 6px rgba(5,150,105,.3);}
+
+/* ANNOTATION MODAL */
+#ann{display:none;position:fixed;inset:0;background:#000;z-index:100;flex-direction:column;}
+#ann.open{display:flex;}
+.ann-h{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#111;border-bottom:1px solid #222;flex-shrink:0;}
+.ann-h span{font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#aaa;}
+.ann-ok{padding:8px 18px;background:var(--red);color:#fff;border:none;border-radius:7px;font-family:var(--f);font-size:13px;font-weight:700;cursor:pointer;}
+.ann-cw{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#1a1a1a;}
+#aC{max-width:100%;max-height:100%;cursor:crosshair;touch-action:none;display:block;}
+.ann-b{background:#111;padding:10px 12px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;flex-shrink:0;border-top:1px solid #222;}
+.tb{padding:8px 11px;background:#222;border:1px solid #333;border-radius:6px;color:#999;font-family:var(--f);font-size:12px;font-weight:600;cursor:pointer;}
+.tb.act{background:rgba(185,28,28,.25);border-color:#b91c1c;color:#fca5a5;}
+.tb.dng{color:#f87171;}.tb.wrn{color:#fbbf24;}
+.csw{width:26px;height:26px;border-radius:50%;border:2px solid #444;cursor:pointer;flex-shrink:0;}
+.csw.sel{border-color:#fff;border-width:3px;}
+.tsp{width:1px;height:24px;background:#333;margin:0 2px;flex-shrink:0;}
+
+/* ── PRINT / PDF ──────────────────────────── */
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+  #app,#ann,.bot{display:none!important;}
+  #pvw{display:block!important;}
+  @page{size:A4;margin:0;}
+}
+#pvw{
+  display:none;
+  font-family:Verdana,Geneva,sans-serif;
+  font-size:10pt;
+  color:#000;
+  line-height:1.45;
+}
+
+/* WATERMARK – covers every printed page */
+.p-wm{
+  position:fixed;
+  top:0;left:0;
+  width:210mm;height:297mm;
+  z-index:0;
+  object-fit:fill;
+  pointer-events:none;
+}
+
+/* REV TABLE – top-right every page */
+.p-rev{
+  position:fixed;
+  top:7mm;right:14mm;
+  width:82mm;
+  z-index:10;
+  font-family:Verdana,Geneva,sans-serif;
+  font-size:7pt;
+}
+.p-rev table{width:100%;border-collapse:collapse;}
+.p-rev td,.p-rev th{border:1px solid #888;padding:2.5px 5px;}
+.p-rev .rh{font-weight:bold;text-align:center;}
+.p-rev .rb{font-weight:bold;}
+
+/* CONTENT AREA – sits above watermark, below header */
+.p-body{
+  position:relative;
+  z-index:1;
+  padding:36mm 16mm 28mm 16mm;
+}
+
+/* TITLE */
+.p-title{
+  font-family:'Copperplate Gothic Bold','Copperplate',fantasy;
+  font-size:24pt;
+  color:#948671;
+  text-align:center;
+  margin-bottom:6mm;
+  page-break-after:avoid;
+  break-after:avoid;
+}
+
+/* SECTION HEADING */
+.p-sh{
+  font-family:'Copperplate Gothic Bold','Copperplate',fantasy;
+  font-size:12pt;
+  color:#b91c1c;
+  margin:5mm 0 0;
+  padding:2px 0 2px 0;
+  border-bottom:1.5px solid #b91c1c;
+  page-break-after:avoid;
+  break-after:avoid;
+}
+
+/* TABLES */
+.p-t{width:100%;border-collapse:collapse;margin-bottom:3mm;font-family:Verdana,Geneva,sans-serif;font-size:10pt;page-break-inside:avoid;break-inside:avoid;}
+.p-t td{border:1px solid #888;padding:3.5px 7px;vertical-align:top;color:#000;}
+.p-t .k{font-weight:bold;width:38%;}
+.p-t tr{page-break-inside:avoid;break-inside:avoid;}
+
+/* PHOTO BLOCK */
+.p-pb{border:1px solid #888;margin-bottom:3mm;page-break-inside:avoid;break-inside:avoid;}
+.p-pb .p-pl{font-family:'Copperplate Gothic Bold','Copperplate',fantasy;font-size:9pt;color:#b91c1c;padding:2px 7px;border-bottom:1px solid #888;}
+.p-pb .p-pi{display:flex;gap:3mm;padding:3mm;}
+.p-pb .p-pi img{flex:1;width:0;max-height:58mm;object-fit:contain;border:1px solid #ccc;}
+
+/* SIGNATURE TABLE */
+.p-st{width:100%;border-collapse:collapse;margin-bottom:3mm;page-break-inside:avoid;break-inside:avoid;}
+.p-st td{border:1px solid #888;width:50%;vertical-align:top;}
+.p-st .s-h{font-family:'Copperplate Gothic Bold','Copperplate',fantasy;font-size:10pt;color:#b91c1c;padding:2px 7px;border-bottom:1px solid #888;display:block;}
+.p-st .s-s{font-size:8pt;color:#666;padding:1px 7px;border-bottom:1px solid #ddd;display:block;}
+.p-st .s-a{height:28mm;padding:2mm 3mm;display:flex;align-items:center;}
+.p-st .s-a img{max-height:24mm;max-width:100%;}
+.p-note{font-size:8pt;font-style:italic;color:#555;margin:1mm 0 3mm 1mm;page-break-inside:avoid;break-inside:avoid;}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <header class="app-hdr">
+    <img src="data:image/png;base64,@@FULL@@" alt="Talon">
+    <div class="hdr-t">
+      <div class="ver">QCD0003 &middot; Ver 0 &middot; 3 Nov 2025</div>
+      <h1>Quality Assessment Report</h1>
+    </div>
+  </header>
+
+  <!-- S1 -->
+  <div class="sec">
+    <div class="sec-hdr"><div class="sec-hdr-l"><div class="lbl">Section 1</div><div class="nm">Basic Information</div></div></div>
+    <div class="sec-body">
+      <div class="fld">
+        <label>Report Type</label>
+        <div class="og" id="rtG">
+          <div class="oi" data-rt="NCP" onclick="pRT(this)"><div class="om"></div><span class="ot">Non-Conformance Product</span></div>
+          <div class="oi" data-rt="CIF" onclick="pRT(this)"><div class="om"></div><span class="ot">Continuous Improvement Findings</span></div>
+        </div>
+      </div>
+      <div class="fld">
+        <label>Report No.</label>
+        <div class="rno-w"><div class="rno-p" id="rnP">?&ndash;</div><input type="text" id="rnN" placeholder="0001" inputmode="numeric" maxlength="6" oninput="this.value=this.value.replace(/\D/g,'');upT()"></div>
+      </div>
+      <div class="fld"><label>Date Issued</label><input type="date" id="dIss"></div>
+      <div class="fld">
+        <label>Issued By</label>
+        <select id="iBy"><option value="">Select person&hellip;</option><option>Ahmad Fudhail</option><option>Wan M. Afif</option></select>
+      </div>
+      <div class="fld"><label>Part / Heat Number</label><input type="text" id="pH" placeholder="Enter part or heat number"></div>
+      <div class="fld">
+        <label>Crate Number</label>
+        <div class="pfx-w"><div class="pfx">TIC_</div><input type="text" id="cN" placeholder="Enter crate number"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S2 -->
+  <div class="sec">
+    <div class="sec-hdr">
+      <div class="sec-hdr-l">
+        <div class="lbl">Section 2</div>
+        <div class="nm">Description of
+          <select id="s2t" style="border:none;background:transparent;color:var(--red);font-family:var(--f);font-size:14px;font-weight:700;outline:none;cursor:pointer;-webkit-appearance:none;padding:0 18px 0 4px;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23b91c1c'%3E%3Cpath d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z'/%3E%3C/svg%3E&quot;);background-repeat:no-repeat;background-position:right 0 center;background-size:16px">
+            <option value="">&#9660; Select</option><option>Finding</option><option>Non-Conformance</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="sec-body">
+      <div class="fld">
+        <label>Defect Type</label>
+        <div class="og" id="dfG">
+          <div class="oi" data-dv="Gauging"    onclick="tDef(this)"><div class="om sq"></div><span class="ot">Gauging</span></div>
+          <div class="oi" data-dv="Casting"    onclick="tDef(this)"><div class="om sq"></div><span class="ot">Casting</span></div>
+          <div class="oi" data-dv="Appearance" onclick="tDef(this)"><div class="om sq"></div><span class="ot">Appearance</span></div>
+          <div class="oi" data-dv="Assembly"   onclick="tDef(this)"><div class="om sq"></div><span class="ot">Assembly</span></div>
+          <div class="oi" data-dv="Others"     onclick="tDef(this)"><div class="om sq"></div><span class="ot">Others</span></div>
+        </div>
+      </div>
+      <div class="fld">
+        <label>Location</label>
+        <select id="loc"><option value="">Select location&hellip;</option><option>Tiger 1</option><option>Tiger 2</option></select>
+      </div>
+      <div class="fld"><label>Description</label><textarea id="dsc" placeholder="Describe the defect or finding in detail&hellip;" rows="4"></textarea></div>
+      <div class="fld">
+        <label>Photos &mdash; tap slot to add &middot; tap photo to annotate / remove</label>
+        <div class="pg" id="pg-s2">
+          <div class="ps" id="s2-0" onclick="pC('s2',0)"><div class="pi">&#128247;</div><div class="pl">Photo 1</div></div>
+          <div class="ps" id="s2-1" onclick="pC('s2',1)"><div class="pi">&#128247;</div><div class="pl">Photo 2</div></div>
+          <div class="ps" id="s2-2" onclick="pC('s2',2)"><div class="pi">&#128247;</div><div class="pl">Photo 3</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S3 -->
+  <div class="sec">
+    <div class="sec-hdr">
+      <div class="sec-hdr-l"><div class="lbl">Section 3</div><div class="nm">QC Lead Review</div></div>
+      <div id="b3" class="bdg bdg-o">Not Required</div>
+    </div>
+    <div class="sec-body">
+      <div class="tg-r">
+        <button class="tg-b on" id="s3off" onclick="tgS(3,false)">Not Required</button>
+        <button class="tg-b"    id="s3on"  onclick="tgS(3,true)">Required</button>
+      </div>
+      <div id="s3b" style="display:none">
+        <div class="fld">
+          <label>Initial Action</label>
+          <div class="og" id="iaG">
+            <div class="oi" data-ia="Hold"      onclick="pIA(this)"><div class="om"></div><span class="ot">Hold</span></div>
+            <div class="oi" data-ia="Replace"   onclick="pIA(this)"><div class="om"></div><span class="ot">Replace</span></div>
+            <div class="oi" data-ia="Rework"    onclick="pIA(this)"><div class="om"></div><span class="ot">Rework</span></div>
+            <div class="oi" data-ia="Use as Is" onclick="pIA(this)"><div class="om"></div><span class="ot">Use as Is</span></div>
+          </div>
+        </div>
+        <div class="fld"><label>Remarks</label><textarea id="s3r" placeholder="QC Lead remarks&hellip;" rows="3"></textarea></div>
+        <div class="fld"><label>Date</label><input type="date" id="s3d"></div>
+        <div class="fld">
+          <label>Supporting Photos (optional)</label>
+          <div class="pg">
+            <div class="ps" id="s3-0" onclick="pC('s3',0)"><div class="pi">&#128247;</div><div class="pl">Photo 1</div></div>
+            <div class="ps" id="s3-1" onclick="pC('s3',1)"><div class="pi">&#128247;</div><div class="pl">Photo 2</div></div>
+            <div class="ps" id="s3-2" onclick="pC('s3',2)"><div class="pi">&#128247;</div><div class="pl">Photo 3</div></div>
+          </div>
+        </div>
+        <div class="note">&#9888; If <strong>Hold</strong> or <strong>Replace</strong> is selected, Section 4 is compulsory.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S4 -->
+  <div class="sec">
+    <div class="sec-hdr">
+      <div class="sec-hdr-l"><div class="lbl">Section 4</div><div class="nm">MRB Review</div></div>
+      <div id="b4" class="bdg bdg-o">Not Required</div>
+    </div>
+    <div class="sec-body">
+      <div class="tg-r">
+        <button class="tg-b on" id="s4off" onclick="tgS(4,false)">Not Required</button>
+        <button class="tg-b"    id="s4on"  onclick="tgS(4,true)">Required</button>
+      </div>
+      <div id="s4b" style="display:none">
+        <div class="fld">
+          <label>Members Present</label>
+          <div class="mr"><div class="mn">1</div><input type="text" class="mbr" placeholder="Member 1 name"></div>
+          <div class="mr"><div class="mn">2</div><input type="text" class="mbr" placeholder="Member 2 name"></div>
+          <div class="mr"><div class="mn">3</div><input type="text" class="mbr" placeholder="Member 3 name"></div>
+          <div class="mr"><div class="mn">4</div><input type="text" class="mbr" placeholder="Member 4 name"></div>
+          <div class="mr" style="margin-bottom:0"><div class="mn">5</div><input type="text" class="mbr" placeholder="Member 5 name"></div>
+        </div>
+        <div class="fld">
+          <label>Decision</label>
+          <div class="og" id="dcG">
+            <div class="oi" data-dc="Rework (with instructions)"  onclick="pDC(this)"><div class="om"></div><span class="ot">Rework (with instructions)</span></div>
+            <div class="oi" data-dc="Scrap / Return to Supplier"  onclick="pDC(this)"><div class="om"></div><span class="ot">Scrap / Return to Supplier</span></div>
+            <div class="oi" data-dc="Use as Is (concession)"      onclick="pDC(this)"><div class="om"></div><span class="ot">Use as Is (concession)</span></div>
+          </div>
+        </div>
+        <div class="fld"><label>Rationale / Comments</label><textarea id="s4r" placeholder="MRB rationale or comments&hellip;" rows="3"></textarea></div>
+        <div class="fld">
+          <label>Supporting Photos (optional)</label>
+          <div class="pg">
+            <div class="ps" id="s4-0" onclick="pC('s4',0)"><div class="pi">&#128247;</div><div class="pl">Photo 1</div></div>
+            <div class="ps" id="s4-1" onclick="pC('s4',1)"><div class="pi">&#128247;</div><div class="pl">Photo 2</div></div>
+            <div class="ps" id="s4-2" onclick="pC('s4',2)"><div class="pi">&#128247;</div><div class="pl">Photo 3</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S5 -->
+  <div class="sec">
+    <div class="sec-hdr"><div class="sec-hdr-l"><div class="lbl">Section 5</div><div class="nm">Approvals</div></div></div>
+    <div class="sec-body">
+      <div class="two-c">
+        <div class="fld"><label>Talon Engineering</label>
+          <div class="sw"><canvas id="sp5a"></canvas><div class="sh2">Sign &amp; Chop</div><div class="sc" onclick="clrS('sp5a')">Clear</div></div>
+        </div>
+        <div class="fld"><label>Supplier</label>
+          <div class="sw"><canvas id="sp5b"></canvas><div class="sh2">Sign &amp; Chop</div><div class="sc" onclick="clrS('sp5b')">Clear</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /#app -->
+
+<!-- BOTTOM BAR -->
+<div class="bot">
+  <div class="bot-btns">
+    <button class="gbn gbn-pdf"  onclick="doExport('pdf')">&#11015; PDF</button>
+    <button class="gbn gbn-doc"  onclick="doExport('doc')">&#128196; Word</button>
+    <button class="gbn gbn-both" onclick="doExport('both')">&#10022; Both</button>
+  </div>
+</div>
+
+<!-- ANNOTATION MODAL -->
+<div id="ann">
+  <div class="ann-h"><span>&#9998; Annotate Photo</span><button class="ann-ok" onclick="aDone()">Done &#10003;</button></div>
+  <div class="ann-cw" id="aCW"><canvas id="aC"></canvas></div>
+  <div class="ann-b">
+    <button class="tb act" id="tbP" onclick="sTl('pen')">&#9998; Pen</button>
+    <button class="tb"     id="tbA" onclick="sTl('arr')">&rarr; Arrow</button>
+    <button class="tb"     id="tbC" onclick="sTl('cir')">&#9675; Circle</button>
+    <div class="tsp"></div>
+    <div class="csw sel" style="background:#ef4444" onclick="sClr('#ef4444',this)"></div>
+    <div class="csw"     style="background:#f59e0b" onclick="sClr('#f59e0b',this)"></div>
+    <div class="csw"     style="background:#22c55e" onclick="sClr('#22c55e',this)"></div>
+    <div class="csw"     style="background:#fff;border-color:#666" onclick="sClr('#ffffff',this)"></div>
+    <div class="tsp"></div>
+    <button class="tb act" id="tbS" onclick="sSz(2,this)">S</button>
+    <button class="tb"     id="tbM" onclick="sSz(4,this)">M</button>
+    <button class="tb"     id="tbL" onclick="sSz(7,this)">L</button>
+    <div class="tsp"></div>
+    <button class="tb wrn" onclick="aUndo()">&#8629; Undo</button>
+    <button class="tb dng" onclick="aClear()">&#10005; Clear</button>
+  </div>
+</div>
+
+<!-- PRINT VIEW -->
+<div id="pvw">
+  <img class="p-wm" src="data:image/jpeg;base64,@@WM@@" alt="">
+  <div class="p-rev">
+    <table>
+      <tr><th class="rh" colspan="3">Document Version Control</th></tr>
+      <tr><td class="rb">Document Number</td><td class="rb">Version Number</td><td class="rb">Release Date</td></tr>
+      <tr><td>QCD0003</td><td style="text-align:center">0</td><td>3/11/2025</td></tr>
+    </table>
+  </div>
+  <div class="p-body" id="pB"></div>
+</div>
+
+<input type="file" id="fIn" accept="image/*" style="display:none" onchange="onF(event)">
+
+<script>
+/* ── STATE ── */
+const S={rt:'',ia:'',dc:'',s3q:false,s4q:false,defs:new Set()};
+const pads={};
+const PH={s2:[null,null,null],s3:[null,null,null],s4:[null,null,null]};
+let curSet='s2',curSlot=-1;
+
+/* ── INIT ── */
+window.addEventListener('load',()=>{
+  const t=new Date().toISOString().split('T')[0];
+  document.getElementById('dIss').value=t;
+  document.getElementById('s3d').value=t;
+  iPad('sp5a');iPad('sp5b');
+});
+
+function iPad(id){
+  const c=document.getElementById(id);if(!c)return;
+  const w=c.closest('.sw'),dpr=window.devicePixelRatio||2;
+  c.width=w.clientWidth*dpr;c.height=w.clientHeight*dpr;
+  c.getContext('2d').scale(dpr,dpr);
+  pads[id]=new SignaturePad(c,{backgroundColor:'rgb(255,255,255)',penColor:'rgb(20,20,80)',minWidth:.8,maxWidth:2.5});
+}
+function clrS(id){if(pads[id])pads[id].clear();}
+function gSig(id){const p=pads[id];return(p&&!p.isEmpty())?p.toDataURL('image/png'):'';}
+
+function getRN(){const n=(document.getElementById('rnN').value||'').padStart(4,'0');return S.rt?S.rt+'-'+n:'QAR-'+n;}
+function upT(){document.title=getRN();}
+
+function pRT(el){
+  document.querySelectorAll('#rtG .oi').forEach(i=>i.classList.remove('sel'));
+  el.classList.add('sel');S.rt=el.dataset.rt;
+  document.getElementById('rnP').textContent=S.rt+'-';upT();
+}
+function tDef(el){el.classList.toggle('sel');const v=el.dataset.dv;S.defs.has(v)?S.defs.delete(v):S.defs.add(v);}
+
+/* ── PHOTOS ── */
+function pC(set,i){
+  curSet=set;curSlot=i;
+  const ph=PH[set];
+  if(ph[i]){
+    if(confirm('Photo '+(i+1)+':\n\nOK \u2192 Edit\nCancel \u2192 Remove')){openAnn(ph[i].orig);}
+    else{ph[i]=null;rSlot(set,i);}
+  }else{document.getElementById('fIn').click();}
+}
+function onF(e){
+  const f=e.target.files[0];if(!f)return;
+  const fr=new FileReader();
+  fr.onload=ev=>{const s=ev.target.result;PH[curSet][curSlot]={orig:s,ann:s};openAnn(s);};
+  fr.readAsDataURL(f);e.target.value='';
+}
+function rSlot(set,i){
+  const el=document.getElementById(set+'-'+i);
+  el.innerHTML='<div class="pi">&#128247;</div><div class="pl">Photo '+(i+1)+'</div>';
+  el.onclick=()=>pC(set,i);
+}
+function fSlot(set,i,src){
+  const el=document.getElementById(set+'-'+i);
+  el.innerHTML='<img src="'+src+'"><div class="pe">Edit</div><div class="pd" onclick="dPh(event,\''+set+'\','+i+')">&#215;</div>';
+  el.onclick=()=>pC(set,i);
+}
+function dPh(e,set,i){e.stopPropagation();PH[set][i]=null;rSlot(set,i);}
+
+/* ── ANNOTATION ── */
+let aC2,aCtx,aImg=new Image(),atl='pen',acl='#ef4444',asz=2,drw=false,sx=0,sy=0,hist=[];
+function openAnn(src){
+  aC2=document.getElementById('aC');aCtx=aC2.getContext('2d');
+  aImg=new Image();
+  aImg.onload=()=>{
+    const w=document.getElementById('aCW');
+    const sc=Math.min(w.clientWidth/aImg.width,w.clientHeight/aImg.height,1);
+    aC2.width=Math.floor(aImg.width*sc);aC2.height=Math.floor(aImg.height*sc);
+    aCtx.drawImage(aImg,0,0,aC2.width,aC2.height);
+    hist=[aCtx.getImageData(0,0,aC2.width,aC2.height)];
+  };
+  aImg.src=src;
+  document.getElementById('ann').classList.add('open');
+  aC2.addEventListener('touchstart',aS,{passive:false});
+  aC2.addEventListener('touchmove',aM,{passive:false});
+  aC2.addEventListener('touchend',aE,{passive:false});
+  aC2.addEventListener('mousedown',aS);
+  aC2.addEventListener('mousemove',aM);
+  aC2.addEventListener('mouseup',aE);
+}
+function aPos(e){
+  const r=aC2.getBoundingClientRect(),sx2=aC2.width/r.width,sy2=aC2.height/r.height;
+  const p=e.touches?e.touches[0]:e;
+  return{x:(p.clientX-r.left)*sx2,y:(p.clientY-r.top)*sy2};
+}
+function aS(e){e.preventDefault();drw=true;const p=aPos(e);sx=p.x;sy=p.y;if(atl==='pen'){aCtx.beginPath();aCtx.moveTo(sx,sy);}}
+function aM(e){e.preventDefault();if(!drw)return;const p=aPos(e);if(atl==='pen'){aCtx.lineTo(p.x,p.y);aCtx.strokeStyle=acl;aCtx.lineWidth=asz;aCtx.lineCap='round';aCtx.lineJoin='round';aCtx.stroke();}else{if(hist.length)aCtx.putImageData(hist[hist.length-1],0,0);dSh(sx,sy,p.x,p.y);}}
+function aE(e){e.preventDefault();if(!drw)return;drw=false;if(atl!=='pen'){const ev=e.changedTouches?{clientX:e.changedTouches[0].clientX,clientY:e.changedTouches[0].clientY}:e;const p=aPos(ev);if(hist.length)aCtx.putImageData(hist[hist.length-1],0,0);dSh(sx,sy,p.x,p.y);}hist.push(aCtx.getImageData(0,0,aC2.width,aC2.height));if(atl==='pen')aCtx.beginPath();}
+function dSh(x1,y1,x2,y2){
+  aCtx.strokeStyle=acl;aCtx.fillStyle=acl;aCtx.lineWidth=asz;aCtx.lineCap='round';
+  if(atl==='arr'){const a=Math.atan2(y2-y1,x2-x1),h=Math.max(12,asz*4);aCtx.beginPath();aCtx.moveTo(x1,y1);aCtx.lineTo(x2,y2);aCtx.stroke();aCtx.beginPath();aCtx.moveTo(x2,y2);aCtx.lineTo(x2-h*Math.cos(a-Math.PI/6),y2-h*Math.sin(a-Math.PI/6));aCtx.lineTo(x2-h*Math.cos(a+Math.PI/6),y2-h*Math.sin(a+Math.PI/6));aCtx.closePath();aCtx.fill();}
+  else if(atl==='cir'){const rx=Math.abs(x2-x1)/2||1,ry=Math.abs(y2-y1)/2||1;aCtx.beginPath();aCtx.ellipse((x1+x2)/2,(y1+y2)/2,rx,ry,0,0,2*Math.PI);aCtx.stroke();}
+}
+function sTl(t){atl=t;document.querySelectorAll('#tbP,#tbA,#tbC').forEach(b=>b.classList.remove('act'));document.getElementById({pen:'tbP',arr:'tbA',cir:'tbC'}[t]).classList.add('act');}
+function sClr(c,el){acl=c;document.querySelectorAll('.csw').forEach(s=>s.classList.remove('sel'));el.classList.add('sel');}
+function sSz(v,el){asz=v;document.querySelectorAll('#tbS,#tbM,#tbL').forEach(b=>b.classList.remove('act'));el.classList.add('act');}
+function aUndo(){if(hist.length>1){hist.pop();aCtx.putImageData(hist[hist.length-1],0,0);}}
+function aClear(){if(confirm('Clear all annotations?')){aCtx.drawImage(aImg,0,0,aC2.width,aC2.height);hist=[aCtx.getImageData(0,0,aC2.width,aC2.height)];}}
+function aDone(){
+  const out=aC2.toDataURL('image/jpeg',.88);
+  PH[curSet][curSlot]={orig:PH[curSet][curSlot].orig,ann:out};
+  fSlot(curSet,curSlot,out);
+  document.getElementById('ann').classList.remove('open');
+  ['touchstart','touchmove','touchend','mousedown','mousemove','mouseup'].forEach(ev=>{
+    aC2.removeEventListener(ev,ev==='touchstart'||ev==='mousedown'?aS:ev==='touchmove'||ev==='mousemove'?aM:aE);
+  });
+}
+
+/* ── SECTIONS 3 & 4 ── */
+function tgS(n,req){
+  if(n===3)S.s3q=req;else S.s4q=req;
+  const off=document.getElementById('s'+n+'off'),on=document.getElementById('s'+n+'on');
+  const b=document.getElementById('b'+n),bd=document.getElementById('s'+n+'b');
+  off.className='tg-b'+((!req)?' on':'');
+  on.className='tg-b'+(req?' on req':'');
+  b.className='bdg '+(req?'bdg-r':'bdg-o');
+  b.textContent=req?'Required':'Not Required';
+  bd.style.display=req?'block':'none';
+}
+function pIA(el){
+  document.querySelectorAll('#iaG .oi').forEach(i=>i.classList.remove('sel'));
+  el.classList.add('sel');S.ia=el.dataset.ia;
+  if(S.ia==='Hold'||S.ia==='Replace')tgS(4,true);
+}
+function pDC(el){
+  document.querySelectorAll('#dcG .oi').forEach(i=>i.classList.remove('sel'));
+  el.classList.add('sel');S.dc=el.dataset.dc;
+}
+
+/* ── HELPERS ── */
+function fd(v){if(!v)return'\u2014';const d=new Date(v+'T00:00:00');return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
+function ck(y){return y?'\u2611':'\u2610';}
+function row(k,v){return '<tr><td class="k">'+k+'</td><td>'+(v||'\u2014')+'</td></tr>';}
+function sImg(id){const s=gSig(id);return s?'<img src="'+s+'" style="max-height:24mm;max-width:100%">':'';}
+function getM(){return Array.from(document.querySelectorAll('.mbr')).map((e,i)=>{const v=e.value.trim();return v?{n:i+1,name:v}:null;}).filter(Boolean);}
+
+function photoBlock(set,label){
+  const arr=PH[set].filter(Boolean);
+  if(!arr.length)return'';
+  return'<div class="p-pb"><div class="p-pl">'+label+'</div><div class="p-pi">'+arr.map(p=>'<img src="'+p.ann+'">').join('')+'</div></div>';
+}
+
+/* ── EXPORT ── */
+function doExport(mode){
+  buildPV();
+  const rn=getRN();
+  if(mode==='pdf'||mode==='both'){
+    const orig=document.title;
+    document.title=rn;
+    setTimeout(()=>{window.print();setTimeout(()=>{document.title=orig;},2000);},300);
+  }
+  if(mode==='doc'||mode==='both'){
+    const delay=mode==='both'?3500:300;
+    setTimeout(()=>dlWord(rn),delay);
+  }
+}
+
+function dlWord(rn){
+  const body=buildWordBody(rn);
+  const html='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><style>'+
+    '@page Section1{size:595.45pt 841.7pt;margin:72pt 56.7pt 56.7pt 56.7pt;}div.Section1{page:Section1;}'+
+    'body{font-family:Verdana,Geneva,sans-serif;font-size:10pt;color:#000;}'+
+    'h1{font-family:"Copperplate Gothic Bold",Copperplate,serif;font-size:24pt;color:#948671;text-align:center;margin-bottom:12pt;}'+
+    '.s-hd{font-family:"Copperplate Gothic Bold",Copperplate,serif;font-size:12pt;color:#b91c1c;border-bottom:1.5pt solid #b91c1c;margin:12pt 0 4pt;padding-bottom:2pt;}'+
+    'table{width:100%;border-collapse:collapse;margin-bottom:8pt;}'+
+    'td{border:1pt solid #888;padding:4pt 7pt;vertical-align:top;font-family:Verdana,Geneva,sans-serif;font-size:10pt;}'+
+    '.k{font-weight:bold;width:38%;}'+
+    'img{max-width:100%;}'+
+    '</style></head><body><div class="Section1">'+body+'</div></body></html>';
+  const blob=new Blob(['\ufeff'+html],{type:'application/msword'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=rn+'.doc';
+  document.body.appendChild(a);a.click();
+  document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),2000);
+}
+
+function buildWordBody(rn){
+  const s2t=document.getElementById('s2t').value||'';
+  const defCks=['Gauging','Casting','Appearance','Assembly','Others'].map(d=>ck(S.defs.has(d))+' '+d).join(' &nbsp; ');
+  const members=getM();
+  const pa2=PH.s2.filter(Boolean);
+
+  let h='<h1>Quality Assessment Report</h1>';
+  h+='<div class="s-hd">Section 1 &ndash; Basic Information</div>';
+  h+='<table>'+
+    '<tr><td class="k">Report Type:</td><td>'+ck(S.rt==='NCP')+' Non-Conformance Product &nbsp;&nbsp; '+ck(S.rt==='CIF')+' Continuous Improvement Findings</td></tr>'+
+    row('Report No.:','<strong>'+rn+'</strong>')+
+    row('Date Issued:',fd(document.getElementById('dIss').value))+
+    row('Issued By:',document.getElementById('iBy').value)+
+    row('Part / Heat Number:',document.getElementById('pH').value)+
+    '<tr><td class="k">Crate Number:</td><td>TIC_'+document.getElementById('cN').value+'</td></tr>'+
+  '</table>';
+
+  h+='<div class="s-hd">Section 2 &ndash; Description of '+s2t+'</div>';
+  h+='<table>'+
+    '<tr><td class="k">Defect Type:</td><td>'+defCks+'</td></tr>'+
+    row('Location:',document.getElementById('loc').value)+
+    '<tr><td class="k" style="vertical-align:top">Description:</td><td>'+document.getElementById('dsc').value+'</td></tr>'+
+  '</table>';
+  if(pa2.length){h+='<table><tr>'+pa2.map(p=>'<td style="text-align:center"><img src="'+p.ann+'" style="max-height:55mm;max-width:100%"></td>').join('')+'</tr></table>';}
+
+  if(S.s3q){
+    const iaCks=['Hold','Replace','Rework','Use as Is'].map(a=>ck(S.ia===a)+' '+a).join(' &nbsp; ');
+    h+='<div class="s-hd">Section 3 &ndash; QC Lead Review</div>';
+    h+='<table>'+
+      '<tr><td class="k">Initial Action:</td><td>'+iaCks+'</td></tr>'+
+      '<tr><td class="k">Remarks:</td><td>'+document.getElementById('s3r').value+'</td></tr>'+
+      row('Date:',fd(document.getElementById('s3d').value))+
+    '</table>';
+    const pa3=PH.s3.filter(Boolean);
+    if(pa3.length){h+='<table><tr>'+pa3.map(p=>'<td style="text-align:center"><img src="'+p.ann+'" style="max-height:55mm;max-width:100%"></td>').join('')+'</tr></table>';}
+  }
+
+  if(S.s4q){
+    const dcCks=['Rework (with instructions)','Scrap / Return to Supplier','Use as Is (concession)'].map(d=>ck(S.dc===d)+' '+d).join('<br>');
+    const mRows=members.length?members.map(m=>m.n+'. '+m.name).join('<br>'):'—';
+    h+='<div class="s-hd">Section 4 &ndash; MRB Review</div>';
+    h+='<table>'+
+      '<tr><td class="k">Members Present:</td><td>'+mRows+'</td></tr>'+
+      '<tr><td class="k">Decision:</td><td>'+dcCks+'</td></tr>'+
+      '<tr><td class="k">Rationale / Comments:</td><td>'+document.getElementById('s4r').value+'</td></tr>'+
+    '</table>';
+    const pa4=PH.s4.filter(Boolean);
+    if(pa4.length){h+='<table><tr>'+pa4.map(p=>'<td style="text-align:center"><img src="'+p.ann+'" style="max-height:55mm;max-width:100%"></td>').join('')+'</tr></table>';}
+  }
+
+  h+='<div class="s-hd">Section 5 &ndash; Approvals</div>';
+  h+='<table><tr>'+
+    '<td><strong>Talon Engineering</strong><br><br><br><span style="font-size:8pt;color:#666">Sign &amp; Chop</span></td>'+
+    '<td><strong>Supplier</strong><br><br><br><span style="font-size:8pt;color:#666">Sign &amp; Chop</span></td>'+
+  '</tr></table>';
+  return h;
+}
+
+/* ── BUILD PRINT VIEW ── */
+function buildPV(){
+  const rn=getRN(),s2t=document.getElementById('s2t').value||'';
+  const defCks=['Gauging','Casting','Appearance','Assembly','Others'].map(d=>ck(S.defs.has(d))+' '+d).join(' &nbsp; ');
+  const members=getM();
+
+  const pb2=photoBlock('s2','Photos:');
+  let h='';
+
+  h+='<div class="p-title">Quality Assessment Report</div>';
+
+  h+='<div class="p-sh">Section 1 &ndash; Basic Information</div>';
+  h+='<table class="p-t">'+
+    '<tr><td class="k">Report Type:</td><td>'+ck(S.rt==='NCP')+' Non-Conformance Product &nbsp;&nbsp; '+ck(S.rt==='CIF')+' Continuous Improvement Findings</td></tr>'+
+    row('Report No.:','<strong>'+rn+'</strong>')+
+    row('Date Issued:',fd(document.getElementById('dIss').value))+
+    row('Issued By:',document.getElementById('iBy').value)+
+    row('Part / Heat Number:',document.getElementById('pH').value)+
+    '<tr><td class="k">Crate Number:</td><td>TIC_'+document.getElementById('cN').value+'</td></tr>'+
+  '</table>';
+
+  h+='<div class="p-sh">Section 2 &ndash; Description of '+s2t+'</div>';
+  h+='<table class="p-t">'+
+    '<tr><td class="k">Defect Type:</td><td>'+defCks+'</td></tr>'+
+    row('Location:',document.getElementById('loc').value)+
+    '<tr><td class="k" style="vertical-align:top">Description:</td><td style="white-space:pre-wrap;min-height:16mm">'+document.getElementById('dsc').value+'</td></tr>'+
+  '</table>';
+  h+=pb2;
+
+  if(S.s3q){
+    const iaCks=['Hold','Replace','Rework','Use as Is'].map(a=>ck(S.ia===a)+' '+a).join(' &nbsp; ');
+    h+='<div class="p-sh">Section 3 &ndash; QC Lead Review</div>';
+    h+='<table class="p-t">'+
+      '<tr><td class="k">Initial Action:</td><td>'+iaCks+'</td></tr>'+
+      '<tr><td class="k" style="vertical-align:top">Remarks:</td><td style="white-space:pre-wrap;min-height:14mm">'+document.getElementById('s3r').value+'</td></tr>'+
+      row('Date:',fd(document.getElementById('s3d').value))+
+    '</table>';
+    h+=photoBlock('s3','Supporting Photos &ndash; QC Lead:');
+    h+='<p class="p-note">Note: If &ldquo;Hold&rdquo; or &ldquo;Replace&rdquo;, Section 4 is compulsory.</p>';
+  }else{
+    h+='<div class="p-sh">Section 3 &ndash; QC Lead Review <span style="font-family:Verdana,sans-serif;font-size:8pt;font-weight:normal;color:#666">(Not Required)</span></div>';
+  }
+
+  if(S.s4q){
+    const dcCks=['Rework (with instructions)','Scrap / Return to Supplier','Use as Is (concession)'].map(d=>ck(S.dc===d)+' '+d).join('<br>');
+    const mRows=members.length?members.map(m=>'<tr><td style="width:22px;font-weight:bold;color:#555">'+m.n+'.</td><td>'+m.name+'</td></tr>').join(''):'<tr><td colspan="2" style="color:#aaa;font-style:italic">No members listed</td></tr>';
+    h+='<div class="p-sh">Section 4 &ndash; MRB Review</div>';
+    h+='<table class="p-t">'+
+      '<tr><td class="k" style="vertical-align:top">Members Present:</td><td><table style="width:100%;border-collapse:collapse">'+mRows+'</table></td></tr>'+
+      '<tr><td class="k" style="vertical-align:top">Decision:</td><td>'+dcCks+'</td></tr>'+
+      '<tr><td class="k" style="vertical-align:top">Rationale / Comments:</td><td style="white-space:pre-wrap;min-height:14mm">'+document.getElementById('s4r').value+'</td></tr>'+
+    '</table>';
+    h+=photoBlock('s4','Supporting Photos &ndash; MRB:');
+  }else{
+    h+='<div class="p-sh">Section 4 &ndash; MRB Review <span style="font-family:Verdana,sans-serif;font-size:8pt;font-weight:normal;color:#666">(Not Required)</span></div>';
+  }
+
+  h+='<div class="p-sh">Section 5 &ndash; Approvals</div>';
+  h+='<table class="p-st">'+
+    '<tr>'+
+      '<td><span class="s-h">Talon Engineering</span><span class="s-s">Sign &amp; Chop</span><div class="s-a">'+sImg('sp5a')+'</div></td>'+
+      '<td><span class="s-h">Supplier</span><span class="s-s">Sign &amp; Chop</span><div class="s-a">'+sImg('sp5b')+'</div></td>'+
+    '</tr>'+
+  '</table>';
+
+  document.getElementById('pB').innerHTML=h;
+}
+</script>
+</body>
+</html>"""
