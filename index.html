@@ -657,6 +657,10 @@ function saveDraft(){
     s3dt:document.getElementById('s3dt').value,
     s4req:S.s4req,
     members:Array.from(document.querySelectorAll('.mbr')).map(e=>e.value),
+    sigAckQC:getSig('spAckQC'),
+    sigAckProd:getSig('spAckProd'),
+    sig5a:getSig('sp5a'),
+    sig5b:getSig('sp5b'),
     dc:S.dc,
     s4rat:document.getElementById('s4rat').value,
   };
@@ -676,6 +680,7 @@ function loadDraft(e){
 }
 
 function setVal(id,val){const el=document.getElementById(id);if(el&&val!=null)el.value=val;}
+function restoreSig(id,dataUrl){if(!dataUrl||!pads[id]) return;pads[id].fromDataURL(dataUrl);}
 
 function restoreDraft(d){
   if(d.rt){const el=document.querySelector('#rtGrp [data-rt="'+d.rt+'"]');if(el)pickRT(el);}
@@ -715,7 +720,11 @@ function restoreDraft(d){
   if(d.members)document.querySelectorAll('.mbr').forEach((el,i)=>el.value=d.members[i]||'');
   if(d.dc){const el=document.querySelector('#dcGrp [data-dc="'+d.dc+'"]');if(el)pickDC(el);}
   setVal('s4rat',d.s4rat);
-  alert('\u2705 Draft loaded: '+getRN());
+  restoreSig('spAckQC',d.sigAckQC);
+  restoreSig('spAckProd',d.sigAckProd);
+  restoreSig('sp5a',d.sig5a);
+  restoreSig('sp5b',d.sig5b);
+  alert('\\u2705 Draft loaded: '+getRN());
 }
 
 // ═══ PDF ═════════════════════════════════════════════════════
