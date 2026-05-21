@@ -1164,9 +1164,7 @@ function buildPV(){
         Description
       </td>
 
-      <td style="white-space:pre-wrap">
-      ${document.getElementById('desc').value || '—'}
-      </td>
+      <td style="white-space:pre-wrap;min-height:18mm;padding-left:0;text-indent:0;vertical-align:top;">${document.getElementById('desc').value||'—'}</td>
     </tr>
 
   </table>
@@ -1222,9 +1220,7 @@ function buildPV(){
 
         <tr>
           <td class="k">Remarks:</td>
-          <td style="white-space:pre-wrap">
-            ${document.getElementById('s3rmk').value || '—'}
-          </td>
+          <td style="white-space:pre-wrap;min-height:16mm;padding-left:0;text-indent:0;vertical-align:top;">${document.getElementById('s3rmk').value||'—'}</td>
         </tr>
 
         ${row('Date:',fd(document.getElementById('s3dt').value))}
@@ -1281,9 +1277,7 @@ function buildPV(){
 
         <tr>
           <td class="k">Rationale / Comments:</td>
-          <td style="white-space:pre-wrap">
-            ${document.getElementById('s4rat').value || '—'}
-          </td>
+          <td style="white-space:pre-wrap;min-height:16mm;padding-left:0;text-indent:0;vertical-align:top;">${document.getElementById('s4rat').value||'—'}</td>
         </tr>
 
       </table>
