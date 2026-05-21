@@ -157,20 +157,28 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 
 .pdf-page{
   position:relative;
-  width:200mm;
-  min-height:287mm;
+  width:210mm;
+  min-height:297mm;
   background:#fff;
   overflow:hidden;
   page-break-after:always;
-  padding:18mm 14mm 18mm 14mm;
+  
+  padding-top:0.48cm;
+  padding-right:1.4cm;
+  padding-bottom:2.78cm;
+  padding-left:1.4cm;
+
+  box-sizing:border-box;
 }
 
 .pdf-watermark{
   position:absolute;
   top:0;
   left:0;
-  width:210mm;
-  height:297mm;
+  width:21.01cm;
+  height:29.7cm;
+  transform:scale(1);
+  transform-origin:top left;
   object-fit:contain;
   opacity:1;
   pointer-events:none;
@@ -188,7 +196,8 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .pdf-hdr-tbl{
   width:100%;
   border-collapse:collapse;
-  margin-bottom:4mm;
+  margin-bottom:2mm;
+  table-layout:fixed;
 }
 
 .pdf-hdr-tbl .logo-cell{
@@ -207,22 +216,50 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 }
 
 .rev-tbl{
-  width:100%;
+  width:9.04cm;
+  margin-left:8.4cm;
   border-collapse:collapse;
-  font-size:7.5pt;
+  table-layout:auto;
+  font-family:Verdana,Geneva,sans-serif;
 }
 
 .rev-tbl td,
 .rev-tbl th{
   border:1px solid #8f8f8f;
-  padding:4px 6px;
-  background:#fff;
+  padding-top:0;
+  padding-bottom:0;
+  padding-left:0.19cm;
+  padding-right:0.19cm;
+  vertical-align:middle;
+  overflow:hidden;
+  white-space:nowrap;
 }
 
-.rev-tbl .rh,
-.rev-tbl .rb{
-  background:#f3f3f3;
+.rev-tbl .rh{
+  background:#948671;
+  color:#ffffff;
+  font-family:Verdana,Geneva,sans-serif;
   font-weight:bold;
+  font-size:8pt;
+  height:0.91cm;
+}
+
+.rev-tbl .rb{
+  background:#ffffff;
+  color:#c00000;
+  font-family:Verdana,Geneva,sans-serif;
+  font-weight:normal;
+  font-size:7pt;
+  height:0.73cm;
+}
+    
+.rev-tbl tr:nth-child(3) td{
+  background:#ffffff;
+  color:#000000;
+  font-family:Verdana,Geneva,sans-serif;
+  font-size:7pt;
+  font-weight:normal;
+  height:0.64cm;
 }
 
 .pdf-hdr-line{
@@ -980,12 +1017,49 @@ function buildPV(){
   const watermark = 'watermark.jpg';
 
   function pageStart(){
-    return `
-      <div class="pdf-page">
-        <img class="pdf-watermark" src="${watermark}">
-        <div class="pdf-inner">
-    `;
-  }
+
+  return `
+    <div class="pdf-page">
+
+      <img class="pdf-watermark" src="${watermark}">
+
+      <div class="pdf-inner">
+
+        <table class="pdf-hdr-tbl">
+          <tr>
+
+            <td class="logo-cell"></td>
+
+            <td class="rev-cell">
+
+              <table class="rev-tbl">
+
+                <tr>
+                  <th class="rh" colspan="3">
+                    Document Version Control
+                  </th>
+                </tr>
+
+                <tr>
+                  <td class="rb">Document Number</td>
+                  <td class="rb">Version Number</td>
+                  <td class="rb">Release Date</td>
+                </tr>
+
+                <tr>
+                  <td>QCD0003</td>
+                  <td style="text-align:center">0</td>
+                  <td>3/11/2025</td>
+                </tr>
+
+              </table>
+
+            </td>
+
+          </tr>
+        </table>
+  `;
+}
  function pageEnd(){
     return `
         </div>
@@ -998,35 +1072,6 @@ function buildPV(){
   h += pageStart();
 
   h += `
-  <table class="pdf-hdr-tbl">
-    <tr>
-      <td class="logo-cell">
-        <img src="icon-180.png">
-      </td>
-
-      <td class="rev-cell">
-        <table class="rev-tbl">
-          <tr>
-            <th class="rh" colspan="3">Document Version Control</th>
-          </tr>
-
-          <tr>
-            <td class="rb">Document Number</td>
-            <td class="rb">Version Number</td>
-            <td class="rb">Release Date</td>
-          </tr>
-
-          <tr>
-            <td>QCD0003</td>
-            <td style="text-align:center">0</td>
-            <td>3/11/2025</td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-  
-  <hr class="pdf-hdr-line">
 
   <div class="pdf-title">QUALITY ASSESSMENT REPORT</div>
 
