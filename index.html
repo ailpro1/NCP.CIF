@@ -164,7 +164,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   isolation:isolate;
   page-break-after:always;
   
-  padding-top:48px;
+  padding-top:24px;
   padding-right:72px;
   padding-bottom:115px;
   padding-left:72px;
@@ -212,10 +212,11 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 }
 
 .pdf-hdr-tbl{
-  width:100%;
+  width:calc(100% + 52px);
   border-collapse:collapse;
   margin-bottom:14px;
   table-layout:fixed;
+  margin-right:-52px;
 }
 
 .pdf-hdr-tbl .logo-cell{
