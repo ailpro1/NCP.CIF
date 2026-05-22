@@ -1378,6 +1378,10 @@ function buildPV(){
       `;
     }
 
+    const hasPhotos = photoSets[3].filter(Boolean).length > 0 || photoSets[4].filter(Boolean).length > 0;
+
+    if(hasPhotos){ h += pageEnd(); h += pageStart(); }
+
     h += `
 
     <div class="pv-sh">Section 5 – Approvals</div>
