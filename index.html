@@ -1379,13 +1379,17 @@ function buildPV(){
       `;
     }
 
-    const hasPhotos = photoSets[3].filter(Boolean).length > 0 && photoSets[4].filter(Boolean).length > 0;
+    const showSec5 = S.rt === 'CIF' || (S.rt === 'NCP' && (S.s3req || S.s4req));
 
-    if(hasPhotos){ h += pageEnd(); h += pageStart(); }
+    if(showSec5){
 
-    h += `
+      const hasPhotos = photoSets[3].filter(Boolean).length > 0 && photoSets[4].filter(Boolean).length > 0;
 
-    <div class="pv-sh">Section 5 – Approvals</div>
+      if(hasPhotos){ h += pageEnd(); h += pageStart(); }
+
+      h += `
+
+      <div class="pv-sh">Section 5 – Approvals</div>
 
     <table class="pv-sig-tbl">
       <tr>
@@ -1408,7 +1412,7 @@ function buildPV(){
     `;
 
     h += pageEnd();
-  }
+  }}
 
   document.getElementById('pvwContent').innerHTML = h;
 }
