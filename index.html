@@ -303,7 +303,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 }
 .pv-sh{
   font-family:Verdana,Geneva,sans-serif;
-  font-size:6pt;
+  font-size:8pt;
   line-height:1.2;
   font-weight:700;
 
@@ -336,9 +336,9 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   vertical-align:top;
   background:#fff;
 
-  font-family:inherit;
-  font-size:inherit;
-  line-height:inherit;
+  font-family:Verdana,Geneva,sans-serif;
+  font-size:7pt;
+  line-height:1.35;
   font-weight:normal;
 
   word-break:break-word;
@@ -348,6 +348,10 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   width:30%;
   font-weight:bold;
   background:#f3f3f3;
+  font-family:Verdana,Geneva,sans-serif;
+  font-size:7pt;
+  line-height:1.35;
+  font-weight:bold;
 }
 
 .pv-photo-block{
@@ -358,7 +362,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 
 .ph-lbl{
   padding:4px 8px;
-  font-size:5pt;
+  font-size:8pt;
   font-weight:700;
   color:#b91c1c;
   border-bottom:1px solid #8f8f8f;
@@ -1164,7 +1168,7 @@ function buildPV(){
         Description
       </td>
 
-      <td style="white-space:pre-wrap;min-height:18mm;padding-left:0;text-indent:0;vertical-align:top;">${document.getElementById('desc').value||'—'}</td>
+      <td style="white-space:pre-wrap;min-height:18mm;text-indent:0;vertical-align:top;">${document.getElementById('desc').value||'—'}</td>
     </tr>
 
   </table>
@@ -1220,7 +1224,7 @@ function buildPV(){
 
         <tr>
           <td class="k">Remarks:</td>
-          <td style="white-space:pre-wrap;min-height:16mm;padding-left:0;text-indent:0;vertical-align:top;">${document.getElementById('s3rmk').value||'—'}</td>
+          <td style="white-space:pre-wrap;min-height:16mm;text-indent:0;vertical-align:top;">${document.getElementById('s3rmk').value||'—'}</td>
         </tr>
 
         ${row('Date:',fd(document.getElementById('s3dt').value))}
@@ -1277,7 +1281,7 @@ function buildPV(){
 
         <tr>
           <td class="k">Rationale / Comments:</td>
-          <td style="white-space:pre-wrap;min-height:16mm;padding-left:0;text-indent:0;vertical-align:top;">${document.getElementById('s4rat').value||'—'}</td>
+          <td style="white-space:pre-wrap;min-height:16mm;text-indent:0;vertical-align:top;">${document.getElementById('s4rat').value||'—'}</td>
         </tr>
 
       </table>
