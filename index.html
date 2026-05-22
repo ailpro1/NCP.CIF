@@ -329,28 +329,114 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   table-layout:fixed;
 }
 
-.pv-t td{
-  border:1px solid #8f8f8f;
-  padding:6px 7px;
-  vertical-align:top;
-  background:#fff;
+/* =========================================
+   GLOBAL PDF TABLE TYPOGRAPHY SYSTEM
+========================================= */
+
+.pv-t{
+  width:100%;
+  border-collapse:collapse;
+  margin-bottom:12px;
+
+  table-layout:fixed;
 
   font-family:Verdana,Geneva,sans-serif;
-  font-size:10pt;
+
+  font-size:8pt;
+
   line-height:1.35;
+
+  color:#000;
+}
+
+/* ALL TABLE CELLS */
+
+.pv-t td{
+  border:1px solid #8f8f8f;
+
+  padding:6px 7px;
+
+  vertical-align:top;
+
+  background:#fff;
+
+  font-family:inherit;
+
+  font-size:inherit;
+
+  line-height:inherit;
+
   font-weight:normal;
+
+  color:inherit;
 
   word-break:break-word;
 }
 
+/* LEFT LABEL COLUMN */
+
 .pv-t .k{
-  width:30%;
-  font-weight:bold;
+  width:28%;
+
   background:#f3f3f3;
-  font-family:Verdana,Geneva,sans-serif;
-  font-size:8pt;
-  line-height:1.35;
+
   font-weight:bold;
+
+  font-size:8pt;
+}
+
+/* RIGHT VALUE COLUMN */
+
+.pv-t td:not(.k){
+  font-weight:normal;
+
+  font-size:8pt;
+}
+
+/* LONG TEXT FIELDS */
+
+.pv-t td[style*=\"pre-wrap\"]{
+  line-height:1.45;
+
+  text-indent:0;
+}
+
+/* SECTION HEADERS */
+
+.pv-sh{
+  font-family:Verdana,Geneva,sans-serif;
+
+  font-size:9pt;
+
+  font-weight:700;
+
+  line-height:1.2;
+
+  color:#b91c1c;
+
+  border-bottom:1.5px solid #b91c1c;
+
+  padding-bottom:6px;
+
+  margin:18px 0 10px;
+}
+
+/* MAIN REPORT TITLE */
+
+.pdf-title{
+  text-align:center;
+
+  font-family:Verdana,Geneva,sans-serif;
+
+  font-size:22pt;
+
+  font-weight:700;
+
+  line-height:1.1;
+
+  color:#9a8d72;
+
+  margin-bottom:22px;
 }
 
 .pv-photo-block{
