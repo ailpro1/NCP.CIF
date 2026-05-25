@@ -1289,43 +1289,44 @@ function buildPV(){
 
   h += pageEnd();
 
-  if(S.s3req || S.s4req){
+  if(S.s3req || S.s4req || S.rt === 'CIF'){
 
     h += pageStart();
 
     if(S.s3req){
+      // ... your existing section 3 code, unchanged
+    }
 
-      const iaCks = ['Hold','Replace','Rework','Use as Is']
-        .map(a => ck(S.ia===a)+' '+a)
-        .join(' &nbsp; ');
+    if(S.s4req){
+      // ... your existing section 4 code, unchanged
+    }
+
+    const showSec5 = S.rt === 'CIF' || (S.rt === 'NCP' && (S.s3req || S.s4req));
+
+    if(showSec5){
+      const hasPhotos = photoSets[3].filter(Boolean).length > 0 && photoSets[4].filter(Boolean).length > 0;
+      if(hasPhotos){ h += pageEnd(); h += pageStart(); }
 
       h += `
-
-      <div class="pv-sh">Section 3 – QC Lead Review</div>
-
-      <table class="pv-t">
-
+      <div class="pv-sh">Section 5 – Approvals</div>
+      <table class="pv-sig-tbl">
         <tr>
-          <td class="k">Initial Action:</td>
-          <td>${iaCks}</td>
+          <td>
+            <span class="sh">Talon Engineering</span>
+            <span class="sub">Sign & Chop</span>
+            <div class="sarea">${sc('sp5a')}</div>
+          </td>
+          <td>
+            <span class="sh">Supplier</span>
+            <span class="sub">Sign & Chop</span>
+            <div class="sarea">${sc('sp5b')}</div>
+          </td>
         </tr>
-
-        <tr>
-          <td class="k">Remarks:</td>
-          <td style="white-space:pre-wrap;min-height:16mm;text-indent:0;vertical-align:top;">${document.getElementById('s3rmk').value||'—'}</td>
-        </tr>
-
-        ${row('Date:',fd(document.getElementById('s3dt').value))}
-
       </table>
-
-      ${photoBlock(3,'Supporting Photos')}
-
-      <p class="pv-note">
-        Note: If “Hold” or “Replace”, Section 4 is compulsory.
-      </p>
-
       `;
+    }
+
+    h += pageEnd();
     }
 
     if(S.s4req){
