@@ -1386,6 +1386,7 @@ function buildPV(){
       const hasPhotos = photoSets[3].filter(Boolean).length > 0 && photoSets[4].filter(Boolean).length > 0;
 
       if(hasPhotos){ h += pageEnd(); h += pageStart(); }
+      else if(!S.s3req && !S.s4req){ h += pageStart(); }
 
       h += `
 
