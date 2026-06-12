@@ -1295,7 +1295,7 @@ async function buildPV(){
     const mRows = members.length
       ? members.map(m => `
           <tr>
-            <td style="width:22px;font-weight:bold">${m.n}.</td>
+            <td style=\"width:32px;font-weight:bold;white-space:nowrap\">${m.n}.</td>
             <td>${m.name}</td>
           </tr>
         `).join('')
